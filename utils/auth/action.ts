@@ -4,6 +4,11 @@ import { redirect } from "next/navigation";
 import type { Provider } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/server";
 
+interface AuthData {
+  email: string;
+  password: string;
+}
+
 const signInWithProvider = (provider: Provider) => async () => {
   const supabase = await createClient();
   const authCallbackUrl = `${process.env.APP_URL}/auth/callback`;
@@ -24,6 +29,40 @@ const signInWithProvider = (provider: Provider) => async () => {
   }
 };
 
+const signUp = async (authData: AuthData) => {
+  const supabase = await createClient();
+
+  try {
+    const { error } = await supabase.auth.signUp(authData);
+
+    if (error) {
+      return { error: error.message };
+    }
+
+    return { success: "Check your email to confirm your account." };
+  } catch (error) {
+    console.error("Sign up error:", error);
+    return { error: "An unexpected error occurred. Please try again." };
+  }
+};
+
+const signIn = async (authData: AuthData) => {
+  const supabase = await createClient();
+
+  try {
+    const { error } = await supabase.auth.signInWithPassword(authData);
+
+    if (error) {
+      return { error: error.message };
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Login Error:", error);
+    return { error: "An unexpected error occured. Please try again." };
+  }
+};
+
 const signOut = async () => {
   const supabase = await createClient();
   await supabase.auth.signOut();
@@ -33,4 +72,4 @@ const signOut = async () => {
 
 const signInWithGoogle = signInWithProvider("google");
 
-export { signInWithGoogle, signOut };
+export { signInWithGoogle, signOut, signUp, signIn };

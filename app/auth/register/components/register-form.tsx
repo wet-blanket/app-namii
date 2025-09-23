@@ -32,7 +32,9 @@ export default function RegisterForm() {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {};
+  const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
+    setIsLoading(true);
+  };
 
   return (
     <Form {...form}>
