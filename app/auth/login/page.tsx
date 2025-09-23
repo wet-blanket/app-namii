@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Waves } from "lucide-react";
-import GoogleAuth from "@/app/auth/login/components/google-auth";
+import GoogleAuth from "@/components/auth/google-auth";
 import LoginForm from "@/app/auth/login/components/login-form";
 
 export default function Login() {
-  // TODO: move the logo and footer links to auth/layout.tsx
+  // TODO: move the logo and footer links to /auth/layout.tsx
   return (
     <div className="space-y-9">
       {/* Logo placeholder */}

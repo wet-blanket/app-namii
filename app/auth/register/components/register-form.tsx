@@ -1,12 +1,11 @@
 "use client";
 
 import * as z from "zod";
-import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchema } from "@/schema/auth-schema";
+import { RegisterSchema } from "@/schema/auth-schema";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,21 +17,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof RegisterSchema>>({
+    resolver: zodResolver(RegisterSchema),
     defaultValues: {
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
-    setIsLoading(true);
-  };
+  const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {};
 
   return (
     <Form {...form}>
@@ -44,7 +44,11 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="email@example.com" {...field} autoFocus />
+                <Input
+                  placeholder="yourname@example.com"
+                  {...field}
+                  autoFocus
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -76,13 +80,38 @@ export default function LoginForm() {
                       <Eye className="h-4 w-4" />
                     )}
                   </button>
-                  <Link
-                    href="/auth/forgot-password"
-                    className="text-muted-foreground absolute -top-[26px] right-0 text-sm font-medium hover:text-primary"
-                    tabIndex={2}
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm Password</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Input
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="confirm your password"
+                    {...field}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                    tabIndex={-1}
                   >
-                    Forgot password?
-                  </Link>
+                    {!showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
                 </div>
               </FormControl>
               <FormMessage />
@@ -93,19 +122,15 @@ export default function LoginForm() {
         <Button
           type="submit"
           className="w-full bg-primary"
-          disabled={
-            isLoading
-            // !form.watch("email")?.trim() ||
-            // !form.watch("password")?.trim()
-          }
+          disabled={isLoading}
         >
           {isLoading ? (
             <div className="flex items-center justify-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin" />
-              Signing in...
+              Creating account...
             </div>
           ) : (
-            "Continue"
+            "Create account"
           )}
         </Button>
 
