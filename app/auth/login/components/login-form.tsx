@@ -110,6 +110,7 @@ export default function LoginForm() {
           )}
         />
 
+        {/* TODO: finalize if still needs to watch the form and disable the button */}
         <Button
           type="submit"
           className="w-full bg-primary"
