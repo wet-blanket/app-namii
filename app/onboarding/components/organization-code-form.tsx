@@ -6,7 +6,11 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 
-export default function OnboardingForm() {
+export default function OrganizationCode({
+  onComplete,
+}: {
+  onComplete?: () => void;
+}) {
   return (
     <div>
       <InputOTP maxLength={6} autoFocus>

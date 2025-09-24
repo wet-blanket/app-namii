@@ -1,7 +1,14 @@
+"use client";
+
+import { useState } from "react";
 import { Waves } from "lucide-react";
-import OnboardingForm from "@/app/onboarding/components/onboarding-form";
+import PersonalInformationForm from "@/app/onboarding/components/personal-information-form";
+import OrganizationCode from "@/app/onboarding/components/organization-code-form";
 
 export default function Onboarding() {
+  const [step, setStep] = useState<1 | 2>(1);
+  const totalSteps = 2;
+
   return (
     <div className="min-h-screen w-full relative p-12 flex">
       <div
@@ -23,16 +30,41 @@ export default function Onboarding() {
         </div>
 
         <div>
-          {/* TODO: Change the static name */}
-          <h2 className="text-xl font-bold">Hello, James</h2>
+          <h2 className="text-xl font-bold">
+            {step === 1 ? "Let’s get started" : "Enter Invite Code"}
+          </h2>
           <h3 className="text-base-400">
-            Provide your invite code to securely join your organization and
-            access all features.
+            {step === 1
+              ? "Set up your profile with a name and @handle so others recognize you."
+              : "Provide your invite code to securely join your organization and access the workspace."}
           </h3>
         </div>
 
         <div className="flex justify-center">
-          <OnboardingForm />
+          {step === 1 ? (
+            <PersonalInformationForm onComplete={() => setStep(2)} />
+          ) : (
+            <OrganizationCode
+              onComplete={() => {
+                /* e.g., route to dashboard */
+              }}
+            />
+          )}
+        </div>
+
+        <div className="flex items-center justify-center gap-2 pt-2">
+          {Array.from({ length: totalSteps }, (_, i) => {
+            const dotIndex = i + 1;
+            const isActive = step === dotIndex;
+            return (
+              <span
+                key={dotIndex}
+                className={`h-2 w-2 rounded-full ${
+                  isActive ? "bg-primary/50" : "bg-muted-foreground/40"
+                }`}
+              />
+            );
+          })}
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Namii - The Future of Team Management",
+  title: "Nami - The Future of Team Management",
   description:
     "A simple yet powerful internal tool to track attendance, oversee trainings, and visualize team performance with ease.",
 };
