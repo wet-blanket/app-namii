@@ -3,8 +3,10 @@
 import * as z from "zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signUp } from "@/utils/auth/action";
 import { RegisterSchema } from "@/schema/auth-schema";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -18,6 +20,7 @@ import {
 } from "@/components/ui/form";
 
 export default function RegisterForm() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
@@ -32,8 +35,19 @@ export default function RegisterForm() {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
-    setIsLoading(true);
+  const onSubmit = async (authData: z.infer<typeof RegisterSchema>) => {
+    try {
+      setIsLoading(true);
+      await signUp(authData);
+
+      console.log("A confirmation link has been sent to your email address."); //TODO: change this to a toast
+
+      router.push("/auth/login");
+    } catch (error) {
+      console.error("Registration Error:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -108,7 +122,7 @@ export default function RegisterForm() {
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
                     tabIndex={-1}
                   >
-                    {!showPassword ? (
+                    {!showConfirmPassword ? (
                       <EyeOff className="h-4 w-4" />
                     ) : (
                       <Eye className="h-4 w-4" />

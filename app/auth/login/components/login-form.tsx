@@ -5,8 +5,10 @@ import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "@/schema/auth-schema";
+import { signIn } from "@/utils/auth/action";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +21,7 @@ import {
 } from "@/components/ui/form";
 
 export default function LoginForm() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -30,8 +33,19 @@ export default function LoginForm() {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
-    setIsLoading(true);
+  const onSubmit = async (authData: z.infer<typeof LoginSchema>) => {
+    try {
+      setIsLoading(true);
+      await signIn(authData);
+
+      console.log("A confirmation link has been sent to your email address."); //TODO: change this to a toast
+
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Login Error", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
