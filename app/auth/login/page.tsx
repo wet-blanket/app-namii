@@ -14,7 +14,7 @@ export default function Login() {
 
       {/* Main heading */}
       <div>
-        <h1 className="text-2xl font-bold text-white mb-2">Sign in to Nami</h1>
+        <h1 className="text-2xl font-bold mb-2">Sign in to Nami</h1>
         <p className="text-base-400">
           Don't have an account?{" "}
           <Link
