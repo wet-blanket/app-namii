@@ -58,9 +58,10 @@ export default function RegisterForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel htmlFor={field.name}>Email</FormLabel>
               <FormControl>
                 <Input
+                  id={field.name}
                   placeholder="yourname@example.com"
                   {...field}
                   autoFocus
@@ -76,10 +77,11 @@ export default function RegisterForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel htmlFor={field.name}>Password</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
+                    id={field.name}
                     type={showPassword ? "text" : "password"}
                     placeholder="enter your password"
                     {...field}
@@ -108,10 +110,11 @@ export default function RegisterForm() {
           name="confirmPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
+              <FormLabel htmlFor={field.name}>Confirm Password</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
+                    id={field.name}
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="confirm your password"
                     {...field}

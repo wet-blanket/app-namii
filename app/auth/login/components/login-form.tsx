@@ -56,9 +56,14 @@ export default function LoginForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel htmlFor={field.name}>Email</FormLabel>
               <FormControl>
-                <Input placeholder="email@example.com" {...field} autoFocus />
+                <Input
+                  id={field.name}
+                  placeholder="email@example.com"
+                  {...field}
+                  autoFocus
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -70,10 +75,11 @@ export default function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel htmlFor={field.name}>Password</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
+                    id={field.name}
                     type={showPassword ? "text" : "password"}
                     placeholder="enter your password"
                     {...field}
