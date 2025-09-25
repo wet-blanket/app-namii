@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { Waves } from "lucide-react";
+import { useRouter } from "next/navigation";
 import PersonalInformationForm from "@/app/onboarding/components/personal-information-form";
 import OrganizationCode from "@/app/onboarding/components/organization-code-form";
 
 export default function Onboarding() {
+  const router = useRouter();
   const [step, setStep] = useState<1 | 2>(1);
   const totalSteps = 2;
 
@@ -44,7 +46,7 @@ export default function Onboarding() {
           {step === 1 ? (
             <PersonalInformationForm onComplete={() => setStep(2)} />
           ) : (
-            <OrganizationCode onComplete={() => setStep(1)} /> //temp just for testing it should redirect to dashboard
+            <OrganizationCode onComplete={() => router.push("/dashboard")} />
           )}
         </div>
 
