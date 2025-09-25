@@ -3,8 +3,8 @@
 import { createClient } from "@/utils/supabase/server";
 import { OnboardingSchema } from "@/schema/onboarding-schema";
 
-export async function saveOnboardingInformation(input: unknown) {
-  const parsed = OnboardingSchema.safeParse(input);
+export async function saveOnboardingInformation(data: unknown) {
+  const parsed = OnboardingSchema.safeParse(data);
   if (!parsed.success) {
     return { error: "Invalid data" };
   }

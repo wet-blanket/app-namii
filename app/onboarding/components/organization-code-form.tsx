@@ -1,5 +1,16 @@
 import * as z from "zod";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { VerifyCodeSchema } from "@/schema/onboarding-schema";
 import { Button } from "@/components/ui/button";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 import {
   Form,
   FormControl,
@@ -8,17 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
-import { VerifyCodeSchema } from "@/schema/onboarding-schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { verifyInviteCode } from "../action";
 
 export default function OrganizationCode({
   onComplete,
@@ -37,16 +38,22 @@ export default function OrganizationCode({
 
   const otp = form.watch("verificationCode");
 
-  const onSubmit = async () => {
+  //TODO: handle server action
+  const onSubmit = async (inviteCode: z.infer<typeof VerifyCodeSchema>) => {
     try {
       setIsLoading(true);
-      setFormError("Invalid verification code");
-      setTimeout(() => setFormError(null), 5000);
+      // await verifyInviteCode(inviteCode)
+
+      console.log("Invite code verified"); //TODO: change this to a toast)
+
+      onComplete?.();
     } catch (error) {
       console.error("Verification Error:", error);
+
+      setFormError("Invalid verification code");
+      setTimeout(() => setFormError(null), 5000);
     } finally {
       setIsLoading(false);
-      // onComplete?.();
     }
   };
 
