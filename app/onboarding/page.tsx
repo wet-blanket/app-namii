@@ -44,11 +44,7 @@ export default function Onboarding() {
           {step === 1 ? (
             <PersonalInformationForm onComplete={() => setStep(2)} />
           ) : (
-            <OrganizationCode
-              onComplete={() => {
-                /* e.g., route to dashboard */
-              }}
-            />
+            <OrganizationCode onComplete={() => setStep(1)} /> //temp just for testing it should redirect to dashboard
           )}
         </div>
 
