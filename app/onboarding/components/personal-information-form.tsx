@@ -29,7 +29,7 @@ export default function PersonalInformationForm({
     resolver: zodResolver(OnboardingSchema),
     defaultValues: {
       fullName: "",
-      alias: "",
+      userName: "",
     },
   });
 
@@ -73,10 +73,10 @@ export default function PersonalInformationForm({
 
         <FormField
           control={form.control}
-          name="alias"
+          name="userName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor={field.name}>@alias</FormLabel>
+              <FormLabel htmlFor={field.name}>@username</FormLabel>
               <FormControl>
                 <Input
                   id={field.name}

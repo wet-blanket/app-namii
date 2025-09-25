@@ -35,7 +35,7 @@ export default function Onboarding() {
           </h2>
           <h3 className="text-base-400">
             {step === 1
-              ? "Set up your profile with a name and @handle so others will recognize you in the platform."
+              ? "Set up your profile with a name and handle so others will recognize you in the platform."
               : "Provide your invite code to securely join your organization and access the workspace."}
           </h3>
         </div>

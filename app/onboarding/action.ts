@@ -15,10 +15,10 @@ export async function saveOnboardingInformation(data: unknown) {
   } = await supabase.auth.getUser();
   if (!user) return { error: "Unauthorized" };
 
-  const { fullName, alias } = parsed.data;
+  const { fullName, userName } = parsed.data;
   const { error } = await supabase
     .from("profiles")
-    .upsert({ id: user.id, full_name: fullName, alias });
+    .upsert({ id: user.id, full_name: fullName, user_name: userName });
 
   if (error) {
     return { error: error.message };
@@ -27,4 +27,4 @@ export async function saveOnboardingInformation(data: unknown) {
   return { success: true };
 }
 
-export async function verifyInviteCode(code: unknown) {}
+export async function verifyInviteCode(inviteCode: unknown) {}
