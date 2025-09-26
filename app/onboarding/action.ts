@@ -35,7 +35,6 @@ export async function saveOnboardingInfo(data: unknown) {
     id: user.id,
     full_name: fullName,
     username: userName,
-    onboarding: true,
   });
 
   if (error) {
