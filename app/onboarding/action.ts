@@ -1,9 +1,10 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/utils/supabase/server";
 import { OnboardingSchema, VerifyCodeSchema } from "@/schema/onboarding-schema";
 
-export async function saveOnboardingInformation(data: unknown) {
+export async function saveOnboardingInfo(data: unknown) {
   const parsed = OnboardingSchema.safeParse(data);
   if (!parsed.success) {
     return { error: "Invalid data" };
@@ -13,20 +14,37 @@ export async function saveOnboardingInformation(data: unknown) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
   if (!user) {
-    return { error: "Unauthorized" };
+    redirect("/signin");
   }
 
-  // const { fullName, userName } = parsed.data;
-  // const { error } = await supabase
-  //   .from("profiles")
-  //   .upsert({ id: user.id, full_name: fullName, user_name: userName });
+  const { fullName, userName } = parsed.data;
 
-  // if (error) {
-  //   return { error: error.message };
-  // }
+  // Optional: enforce unique username
+  const { data: existingUser } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("username", userName)
+    .maybeSingle();
 
-  return { success: true };
+  if (existingUser && existingUser.id !== user.id) {
+    return { error: "Username already taken" };
+  }
+
+  const { error } = await supabase.from("profiles").upsert({
+    id: user.id,
+    full_name: fullName,
+    username: userName,
+    onboarding: true,
+  });
+
+  if (error) {
+    console.error("Error saving onboarding info:", error);
+    return { error: error.message };
+  }
+
+  return { success: true, profile: { fullName, userName } };
 }
 
 export async function verifyInviteCode(inviteCode: unknown) {
