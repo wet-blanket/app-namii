@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { OnboardingSchema } from "@/schema/onboarding-schema";
-import { saveOnboardingInformation } from "@/app/onboarding/action";
+import { saveOnboardingInfo } from "@/app/onboarding/action";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +24,7 @@ export default function PersonalInformationForm({
   onComplete?: () => void;
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof OnboardingSchema>>({
     resolver: zodResolver(OnboardingSchema),
@@ -35,22 +36,38 @@ export default function PersonalInformationForm({
 
   const onSubmit = async (onboardingData: z.infer<typeof OnboardingSchema>) => {
     try {
-      setIsLoading(false);
-      // await saveOnboardingInformation(onboardingData);
+      setIsLoading(true);
+      const result = await saveOnboardingInfo(onboardingData);
 
-      console.log("Information saved."); //TODO: change this to a toast)
+      if (result.error) {
+        showError(result.error);
+        return;
+      }
 
+      console.log("Information saved."); //TODO: change this to a toast also improve how error shows
       onComplete?.();
     } catch (error) {
-      console.error("Onboarding Error:", error);
+      console.error("Something went wrong:", error);
+
+      showError("Something went wrong");
     } finally {
-      setIsLoading(true);
+      setIsLoading(false);
     }
   };
+
+  function showError(message: string) {
+    setFormError(message);
+    setTimeout(() => setFormError(null), 5000);
+  }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
+        {formError && (
+          <div className="bg-destructive/20 rounded-md p-4 mb-4">
+            <div className="text-destructive text-sm">{formError}</div>
+          </div>
+        )}
         <FormField
           control={form.control}
           name="fullName"
