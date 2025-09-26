@@ -1,10 +1,10 @@
 import { signOut } from "@/utils/auth/action";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/utils/supabase/server";
+import { createSupabaseServerClient } from "@/utils/supabase/server";
 import { User, Mail, LogOut } from "lucide-react";
 
 export default async function Dashboard() {
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import type { Provider } from "@supabase/supabase-js";
-import { createClient } from "@/utils/supabase/server";
+import { createSupabaseServerClient } from "@/utils/supabase/server";
 
 interface AuthData {
   email: string;
@@ -10,7 +10,7 @@ interface AuthData {
 }
 
 const signInWithProvider = (provider: Provider) => async () => {
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
   const authCallbackUrl = `${process.env.APP_URL}/auth/callback`;
 
   const { data, error } = await supabase.auth.signInWithOAuth({
@@ -30,7 +30,7 @@ const signInWithProvider = (provider: Provider) => async () => {
 };
 
 const signUp = async (authData: AuthData) => {
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
 
   try {
     const { error } = await supabase.auth.signUp(authData);
@@ -47,7 +47,7 @@ const signUp = async (authData: AuthData) => {
 };
 
 const signIn = async (authData: AuthData) => {
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
 
   try {
     const { error } = await supabase.auth.signInWithPassword(authData);
@@ -64,7 +64,7 @@ const signIn = async (authData: AuthData) => {
 };
 
 const signOut = async () => {
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
   await supabase.auth.signOut();
 
   redirect("/auth/login");

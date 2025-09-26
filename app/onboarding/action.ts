@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/utils/supabase/server";
+import { createSupabaseServerClient } from "@/utils/supabase/server";
 import { OnboardingSchema, VerifyCodeSchema } from "@/schema/onboarding-schema";
 
 export async function saveOnboardingInformation(data: unknown) {
@@ -9,7 +9,7 @@ export async function saveOnboardingInformation(data: unknown) {
     return { error: "Invalid data" };
   }
 
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -17,14 +17,14 @@ export async function saveOnboardingInformation(data: unknown) {
     return { error: "Unauthorized" };
   }
 
-  const { fullName, userName } = parsed.data;
-  const { error } = await supabase
-    .from("profiles")
-    .upsert({ id: user.id, full_name: fullName, user_name: userName });
+  // const { fullName, userName } = parsed.data;
+  // const { error } = await supabase
+  //   .from("profiles")
+  //   .upsert({ id: user.id, full_name: fullName, user_name: userName });
 
-  if (error) {
-    return { error: error.message };
-  }
+  // if (error) {
+  //   return { error: error.message };
+  // }
 
   return { success: true };
 }
@@ -35,7 +35,7 @@ export async function verifyInviteCode(inviteCode: unknown) {
     return { error: "Invalid data" };
   }
 
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -44,32 +44,32 @@ export async function verifyInviteCode(inviteCode: unknown) {
   }
 
   // verify the invite code
-  const { data: invite, error: inviteError } = await supabase
-    .from("invite_codes")
-    .select("*")
-    .eq("code", inviteCode)
-    .single();
+  // const { data: invite, error: inviteError } = await supabase
+  //   .from("invite_codes")
+  //   .select("*")
+  //   .eq("code", inviteCode)
+  //   .single();
 
-  if (inviteError || !invite) {
-    return { error: "Invalid invite code" };
-  }
+  // if (inviteError || !invite) {
+  //   return { error: "Invalid invite code" };
+  // }
 
-  // join the org based on the user invite code
-  const { error: memberError } = await supabase
-    .from("organization_members")
-    .insert({
-      user_id: user.id,
-      organization_id: invite.organization_id,
-      role: invite.role,
-    });
+  // // join the org based on the user invite code
+  // const { error: memberError } = await supabase
+  //   .from("organization_members")
+  //   .insert({
+  //     user_id: user.id,
+  //     organization_id: invite.organization_id,
+  //     role: invite.role,
+  //   });
 
-  if (memberError) {
-    return { error: memberError.message };
-  }
+  // if (memberError) {
+  //   return { error: memberError.message };
+  // }
 
-  return {
-    success: true,
-    organizationId: invite.organization_id,
-    role: invite.role,
-  };
+  // return {
+  //   success: true,
+  //   organizationId: invite.organization_id,
+  //   role: invite.role,
+  // };
 }
