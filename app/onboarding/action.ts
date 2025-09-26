@@ -21,7 +21,6 @@ export async function saveOnboardingInfo(data: unknown) {
 
   const { fullName, userName } = parsed.data;
 
-  // Optional: enforce unique username
   const { data: existingUser } = await supabase
     .from("profiles")
     .select("id")
@@ -47,47 +46,47 @@ export async function saveOnboardingInfo(data: unknown) {
   return { success: true, profile: { fullName, userName } };
 }
 
-export async function verifyInviteCode(inviteCode: unknown) {
-  const parsed = VerifyCodeSchema.safeParse(inviteCode);
-  if (!parsed.success) {
-    return { error: "Invalid data" };
-  }
+// export async function verifyInviteCode(inviteCode: unknown) {
+//   const parsed = VerifyCodeSchema.safeParse(inviteCode);
+//   if (!parsed.success) {
+//     return { error: "Invalid data" };
+//   }
 
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
-    return { error: "Unauthorized" };
-  }
+//   const supabase = await createSupabaseServerClient();
+//   const {
+//     data: { user },
+//   } = await supabase.auth.getUser();
+//   if (!user) {
+//     return { error: "Unauthorized" };
+//   }
 
-  // verify the invite code
-  // const { data: invite, error: inviteError } = await supabase
-  //   .from("invite_codes")
-  //   .select("*")
-  //   .eq("code", inviteCode)
-  //   .single();
+// verify the invite code
+// const { data: invite, error: inviteError } = await supabase
+//   .from("invite_codes")
+//   .select("*")
+//   .eq("code", inviteCode)
+//   .single();
 
-  // if (inviteError || !invite) {
-  //   return { error: "Invalid invite code" };
-  // }
+// if (inviteError || !invite) {
+//   return { error: "Invalid invite code" };
+// }
 
-  // // join the org based on the user invite code
-  // const { error: memberError } = await supabase
-  //   .from("organization_members")
-  //   .insert({
-  //     user_id: user.id,
-  //     organization_id: invite.organization_id,
-  //     role: invite.role,
-  //   });
+// // join the org based on the user invite code
+// const { error: memberError } = await supabase
+//   .from("organization_members")
+//   .insert({
+//     user_id: user.id,
+//     organization_id: invite.organization_id,
+//     role: invite.role,
+//   });
 
-  // if (memberError) {
-  //   return { error: memberError.message };
-  // }
+// if (memberError) {
+//   return { error: memberError.message };
+// }
 
-  // return {
-  //   success: true,
-  //   organizationId: invite.organization_id,
-  //   role: invite.role,
-  // };
-}
+// return {
+//   success: true,
+//   organizationId: invite.organization_id,
+//   role: invite.role,
+// };
+// }
