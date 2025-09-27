@@ -5,14 +5,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Activity,
-  BadgeCheck,
   Bug,
   Database,
   Fingerprint,
+  Gamepad2,
   Goal,
   HeartHandshake,
   LayoutDashboard,
   Rocket,
+  Smile,
   Sparkles,
   UserRound,
   Users,
@@ -54,6 +55,11 @@ const generalMenu = [
     icon: Users,
   },
   {
+    title: "Activity",
+    url: "/activity",
+    icon: Gamepad2,
+  },
+  {
     title: "AI Workflow",
     url: "/ai",
     icon: Sparkles,
@@ -69,7 +75,7 @@ const managementMenu = [
   {
     title: "Engagement",
     url: "/engagement",
-    icon: HeartHandshake,
+    icon: Smile,
   },
   {
     title: "People",
@@ -79,7 +85,7 @@ const managementMenu = [
   {
     title: "Leadership",
     url: "/leadership",
-    icon: BadgeCheck,
+    icon: HeartHandshake,
   },
 ];
 
