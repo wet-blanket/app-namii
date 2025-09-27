@@ -6,19 +6,21 @@ import { usePathname } from "next/navigation";
 import {
   Activity,
   Bug,
+  Building2,
+  Clock9,
   Database,
-  Fingerprint,
   Gamepad2,
-  Goal,
   HeartHandshake,
   LayoutDashboard,
   Rocket,
   Smile,
   Sparkles,
   UserRound,
-  Users,
+  UsersRound,
   Waves,
+  Zap,
 } from "lucide-react";
+import AccountSidebar from "@/components/sidebar/account-sidebar";
 import {
   Sidebar,
   SidebarContent,
@@ -31,7 +33,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import AccountSidebar from "@/components/sidebar/account-sidebar";
 
 const generalMenu = [
   {
@@ -40,19 +41,19 @@ const generalMenu = [
     icon: LayoutDashboard,
   },
   {
-    title: "Attendance",
-    url: "/attendance",
-    icon: Fingerprint,
+    title: "Timesheet",
+    url: "/timesheet",
+    icon: Clock9,
   },
   {
     title: "Trainings",
     url: "/trainings",
-    icon: Goal,
+    icon: Zap,
   },
   {
     title: "Teams",
-    url: "/teams",
-    icon: Users,
+    url: "/user",
+    icon: UsersRound,
   },
   {
     title: "Activity",
@@ -104,6 +105,11 @@ const developersMenu = [
     title: "Logs",
     url: "/logs",
     icon: Database,
+  },
+  {
+    title: "Organization",
+    url: "/organization",
+    icon: Building2,
   },
 ];
 
