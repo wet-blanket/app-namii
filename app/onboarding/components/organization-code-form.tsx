@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+// import { verifyInviteCode } from "@/app/onboarding/action";
 import { VerifyCodeSchema } from "@/schema/onboarding-schema";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +20,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { verifyInviteCode } from "../action";
 
 export default function OrganizationCode({
   onComplete,
