@@ -92,7 +92,7 @@ const managementMenu = [
 const developersMenu = [
   {
     title: "Feature Requests",
-    url: "/feature-requests",
+    url: "/feature-request",
     icon: Rocket,
   },
   {
