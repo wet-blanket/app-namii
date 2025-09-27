@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   Sparkles,
   Users,
+  Waves,
 } from "lucide-react";
 import {
   Sidebar,
@@ -23,6 +24,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import AccountSidebar from "@/components/sidebar/account-sidebar";
+import { Separator } from "../ui/separator";
 
 const items = [
   {
@@ -58,10 +60,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <p>Nami</p>
+        <div className="flex items-center px-4 gap-x-1 h-[47px]">
+          <Waves className="h-6 w-6 text-primary" />
+          <h1 className="text-xl font-black">Nami</h1>
+        </div>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
+        <SidebarGroup className="px-4">
           <SidebarGroupLabel>General</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -72,7 +77,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     isActive={pathname === item.url}
                     className={
                       pathname === item.url
-                        ? "!bg-sidebar-primary !text-sidebar-primary-foreground hover:!bg-sidebar-primary"
+                        ? "!bg-sidebar-primary/20 !text-sidebar-primary hover:!bg-sidebar-primary"
                         : "hover:bg-sidebar-primary/20 hover:text-sidebar-primary"
                     }
                   >
