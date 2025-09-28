@@ -47,6 +47,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "invite_codes_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "invite_codes_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
@@ -87,7 +94,15 @@ export type Database = {
           name?: string
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "organizations_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {

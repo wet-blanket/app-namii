@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { Loader2, Plus } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { OrganizationSchema } from "@/schema/developer-schema";
+import { createOrganization } from "@/app/(protected)/organization/action";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,9 +27,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import toast from "react-hot-toast";
 
 export function NewOrganizationForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof OrganizationSchema>>({
     resolver: zodResolver(OrganizationSchema),
@@ -40,7 +43,31 @@ export function NewOrganizationForm() {
 
   const onSubmit = async (orgData: z.infer<typeof OrganizationSchema>) => {
     setIsLoading(true);
+    setFormError(null);
+
+    try {
+      const result = await createOrganization(orgData);
+
+      if (result.error) {
+        showError(result.error);
+        return;
+      }
+
+      if (result.success) {
+        toast.success(result.success);
+      }
+    } catch (error) {
+      console.error("Something went wrong:", error);
+      showError("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  function showError(message: string) {
+    setFormError(message);
+    setTimeout(() => setFormError(null), 5000);
+  }
 
   return (
     <Sheet>
@@ -61,6 +88,14 @@ export function NewOrganizationForm() {
                 place.
               </SheetDescription>
             </SheetHeader>
+
+            {formError && (
+              <div className="px-4">
+                <div className="bg-destructive/20 rounded-md p-4 mb-4">
+                  <div className="text-destructive text-sm">{formError}</div>
+                </div>
+              </div>
+            )}
 
             <FormField
               control={form.control}
