@@ -1,6 +1,7 @@
 "use client";
 
 import * as z from "zod";
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -30,13 +31,15 @@ export default function PersonalInformationForm({
     resolver: zodResolver(OnboardingSchema),
     defaultValues: {
       fullName: "",
-      userName: "",
+      username: "",
     },
   });
 
   const onSubmit = async (onboardingData: z.infer<typeof OnboardingSchema>) => {
+    setIsLoading(true);
+    setFormError(null);
+
     try {
-      setIsLoading(true);
       const result = await saveOnboardingInfo(onboardingData);
 
       if (result.error) {
@@ -44,7 +47,10 @@ export default function PersonalInformationForm({
         return;
       }
 
-      console.log("Information saved."); //TODO: change this to a toast also improve how error shows
+      if (result.success) {
+        toast.success(result.success);
+      }
+
       onComplete?.();
     } catch (error) {
       console.error("Something went wrong:", error);
@@ -68,6 +74,7 @@ export default function PersonalInformationForm({
             <div className="text-destructive text-sm">{formError}</div>
           </div>
         )}
+
         <FormField
           control={form.control}
           name="fullName"
@@ -90,7 +97,7 @@ export default function PersonalInformationForm({
 
         <FormField
           control={form.control}
-          name="userName"
+          name="username"
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor={field.name}>@username</FormLabel>

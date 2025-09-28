@@ -1,6 +1,11 @@
 Nami:
   ☐ Ensure each route's root page.tsx is a server component.
+  ✔ Update TODO of console.log -> react hot toast. @started(25-09-28 18:17) @done(25-09-28 18:46) @lasted(29m55s)
   ✔ Implement sidebar components @started(25-09-26 22:31) @done(25-09-26 22:47) @lasted(16m22s)
+
+Auth:
+  ☐ Add error component to the login page.
+  ☐ Disable google/other button once the form is submitted.
 
 Onboarding:
   ✔ Block access to /onboarding if the user has already completed the onboarding process. @started(25-09-26 20:06) @done(25-09-26 20:12) @lasted(6m13s)

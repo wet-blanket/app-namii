@@ -21,7 +21,7 @@ const signInWithProvider = (provider: Provider) => async () => {
   });
 
   if (error) {
-    console.error(error);
+    return { error: error.message };
   }
 
   if (data.url) {
@@ -39,7 +39,7 @@ const signUp = async (authData: AuthData) => {
       return { error: error.message };
     }
 
-    return { success: "Check your email to confirm your account." };
+    return { success: "Check your email to verify your account" };
   } catch (error) {
     console.error("Sign up error:", error);
     return { error: "An unexpected error occurred. Please try again." };
@@ -56,7 +56,7 @@ const signIn = async (authData: AuthData) => {
       return { error: error.message };
     }
 
-    return { success: true };
+    return { success: "Successfully logged in" };
   } catch (error) {
     console.error("Login Error:", error);
     return { error: "An unexpected error occured. Please try again." };

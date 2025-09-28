@@ -19,30 +19,27 @@ export async function saveOnboardingInfo(data: unknown) {
     redirect("/signin");
   }
 
-  const { fullName, userName } = parsed.data;
-
-  const { data: existingUser } = await supabase
-    .from("profiles")
-    .select("id")
-    .eq("username", userName)
-    .maybeSingle();
-
-  if (existingUser && existingUser.id !== user.id) {
-    return { error: "Username already taken" };
-  }
+  const { fullName, username } = parsed.data;
 
   const { error } = await supabase.from("profiles").upsert({
     id: user.id,
     full_name: fullName,
-    username: userName,
+    username,
   });
 
   if (error) {
+    if (error.code === "23505") {
+      if (error.message.includes("username")) {
+        return { error: "Username already taken" };
+      }
+      return { error: "This information is already in use" };
+    }
+
     console.error("Error saving onboarding info:", error);
     return { error: error.message };
   }
 
-  return { success: true, profile: { fullName, userName } };
+  return { success: "Information saved", profile: { fullName, username } };
 }
 
 // export async function verifyInviteCode(inviteCode: unknown) {

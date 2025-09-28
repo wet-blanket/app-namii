@@ -1,6 +1,7 @@
 "use client";
 
 import * as z from "zod";
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Loader2, Plus } from "lucide-react";
@@ -27,7 +28,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import toast from "react-hot-toast";
 
 export function NewOrganizationForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);

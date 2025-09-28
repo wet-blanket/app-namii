@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const OnboardingSchema = z.object({
   fullName: z.string().min(1, "Your name is required"),
-  userName: z
+  username: z
     .string()
     .min(3, "Username must be atleast 3 characters long")
     .regex(/^[A-Za-z]+$/, "Username can only contain letters"),

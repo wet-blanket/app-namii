@@ -1,6 +1,7 @@
 "use client";
 
 import * as z from "zod";
+import toast from "react-hot-toast";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -22,6 +23,7 @@ import {
 
 export default function LoginForm() {
   const router = useRouter();
+  const [formError, setFormError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -36,21 +38,40 @@ export default function LoginForm() {
   const onSubmit = async (authData: z.infer<typeof LoginSchema>) => {
     try {
       setIsLoading(true);
-      await signIn(authData);
+      const result = await signIn(authData);
 
-      console.log("A confirmation link has been sent to your email address."); //TODO: change this to a toast
+      if (result.error) {
+        showError(result.error);
+        return;
+      }
+
+      if (result.success) {
+        toast.success(result.success);
+      }
 
       router.push("/dashboard");
     } catch (error) {
-      console.error("Login Error", error);
+      console.error("Something went wrong:", error);
+      showError("Something went wrong");
     } finally {
       setIsLoading(false);
     }
   };
 
+  function showError(message: string) {
+    setFormError(message);
+    setTimeout(() => setFormError(null), 5000);
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {formError && (
+          <div className="bg-destructive/20 rounded-md p-4 mb-4">
+            <div className="text-destructive text-sm">{formError}</div>
+          </div>
+        )}
+
         <FormField
           control={form.control}
           name="email"

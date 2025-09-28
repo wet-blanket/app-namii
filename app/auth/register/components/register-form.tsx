@@ -1,6 +1,7 @@
 "use client";
 
 import * as z from "zod";
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -22,6 +23,7 @@ import {
 export default function RegisterForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
@@ -38,21 +40,40 @@ export default function RegisterForm() {
   const onSubmit = async (authData: z.infer<typeof RegisterSchema>) => {
     try {
       setIsLoading(true);
-      await signUp(authData);
+      const result = await signUp(authData);
 
-      console.log("A confirmation link has been sent to your email address."); //TODO: change this to a toast
+      if (result.error) {
+        showError(result.error);
+        return;
+      }
+
+      if (result.success) {
+        toast.success(result.success);
+      }
 
       router.push("/auth/login");
     } catch (error) {
       console.error("Registration Error:", error);
+      showError("Something went wrong");
     } finally {
       setIsLoading(false);
     }
   };
 
+  function showError(message: string) {
+    setFormError(message);
+    setTimeout(() => setFormError(null), 5000);
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {formError && (
+          <div className="bg-destructive/20 rounded-md p-4 mb-4">
+            <div className="text-destructive text-sm">{formError}</div>
+          </div>
+        )}
+
         <FormField
           control={form.control}
           name="email"
