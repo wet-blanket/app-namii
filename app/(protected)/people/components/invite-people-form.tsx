@@ -83,8 +83,6 @@ export function InvitePeopleForm() {
                       id={field.name}
                       placeholder="Generate 6 digit code"
                       {...field}
-                      inputMode="numeric"
-                      pattern="[0-9]*"
                       maxLength={6}
                       autoFocus
                     />
