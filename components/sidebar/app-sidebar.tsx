@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -20,6 +21,7 @@ import {
   Waves,
   Zap,
 } from "lucide-react";
+import SearchSidebar from "@/components/sidebar/search-sidebar";
 import AccountSidebar from "@/components/sidebar/account-sidebar";
 import {
   Sidebar,
@@ -52,7 +54,7 @@ const generalMenu = [
   },
   {
     title: "Teams",
-    url: "/user",
+    url: "/teams",
     icon: UsersRound,
   },
   {
@@ -115,6 +117,16 @@ const developersMenu = [
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isActiveRoute = (itemUrl: string) => {
+    if (!mounted) return false;
+    return pathname === itemUrl || pathname.startsWith(itemUrl + "/");
+  };
 
   return (
     <Sidebar {...props}>
@@ -123,6 +135,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <Waves className="h-6 w-6 text-primary" />
           <h1 className="text-xl font-bold">Nami</h1>
         </div>
+        {/* <SearchSidebar /> */}
       </SidebarHeader>
       <SidebarContent className="text-muted-foreground">
         <SidebarGroup className="px-4">
@@ -135,9 +148,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    isActive={pathname === item.url}
+                    isActive={isActiveRoute(item.url)}
                     className={
-                      pathname === item.url
+                      isActiveRoute(item.url)
                         ? "!bg-sidebar-primary/20 !text-sidebar-primary hover:!bg-sidebar-primary/20"
                         : "hover:bg-sidebar-primary/20 hover:text-sidebar-primary"
                     }
@@ -162,9 +175,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    isActive={pathname === item.url}
+                    isActive={isActiveRoute(item.url)}
                     className={
-                      pathname === item.url
+                      isActiveRoute(item.url)
                         ? "!bg-sidebar-primary/20 !text-sidebar-primary hover:!bg-sidebar-primary/20"
                         : "hover:bg-sidebar-primary/20 hover:text-sidebar-primary"
                     }
@@ -189,9 +202,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    isActive={pathname === item.url}
+                    isActive={isActiveRoute(item.url)}
                     className={
-                      pathname === item.url
+                      isActiveRoute(item.url)
                         ? "!bg-sidebar-primary/20 !text-sidebar-primary hover:!bg-sidebar-primary/20"
                         : "hover:bg-sidebar-primary/20 hover:text-sidebar-primary"
                     }

@@ -10,9 +10,15 @@ import { InvitePeopleSchema } from "@/schema/people-schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -29,6 +35,14 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
+const roles = [
+  { value: "member", label: "Member" },
+  { value: "lead", label: "Lead" },
+  { value: "manager", label: "Manager" },
+  { value: "leadership", label: "Leadership" },
+  { value: "dev", label: "Dev" },
+];
+
 export function InvitePeopleForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formError, setFormError] = useState<string | null>(null);
@@ -37,6 +51,7 @@ export function InvitePeopleForm() {
     resolver: zodResolver(InvitePeopleSchema),
     defaultValues: {
       inviteCode: "",
+      role: "",
     },
   });
 
@@ -85,8 +100,37 @@ export function InvitePeopleForm() {
                       {...field}
                       maxLength={6}
                       autoFocus
+                      autoComplete="off"
                     />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="role"
+              render={({ field }) => (
+                <FormItem className="px-4">
+                  <FormLabel>Assign Role</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a role" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {roles.map((role) => (
+                        <SelectItem key={role.value} value={role.value}>
+                          {role.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
