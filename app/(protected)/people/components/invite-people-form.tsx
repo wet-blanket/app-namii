@@ -4,9 +4,10 @@ import * as z from "zod";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { UserRoundPlus } from "lucide-react";
+import { Loader2, UserRoundPlus } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InvitePeopleSchema } from "@/schema/people-schema";
+import { createInviteCode } from "@/app/(protected)/people/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -37,9 +38,9 @@ import {
 
 const roles = [
   { value: "member", label: "Member" },
-  { value: "lead", label: "Lead" },
+  { value: "admin", label: "Admin" },
   { value: "manager", label: "Manager" },
-  { value: "leadership", label: "Leadership" },
+  { value: "director", label: "Director" },
   { value: "dev", label: "Dev" },
 ];
 
@@ -55,9 +56,33 @@ export function InvitePeopleForm() {
     },
   });
 
-  const onSubmit = async () => {
+  const onSubmit = async (inviteData: z.infer<typeof InvitePeopleSchema>) => {
     setIsLoading(true);
     setFormError(null);
+
+    try {
+      const result = await createInviteCode(inviteData);
+
+      if (result.error) {
+        showError(result.error);
+        return;
+      }
+
+      if (result.success) {
+        toast.success(result.success);
+        form.reset();
+      }
+    } catch (error) {
+      console.error("Something went wrong:", error);
+      showError("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+
+    function showError(message: string) {
+      setFormError(message);
+      setTimeout(() => setFormError(null), 5000);
+    }
   };
 
   return (
@@ -114,10 +139,7 @@ export function InvitePeopleForm() {
               render={({ field }) => (
                 <FormItem className="px-4">
                   <FormLabel>Assign Role</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select a role" />
@@ -137,7 +159,20 @@ export function InvitePeopleForm() {
             />
 
             <SheetFooter>
-              <Button type="submit">Create Invite Code</Button>
+              <Button
+                type="submit"
+                className="w-full bg-primary"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Creating new invitation...
+                  </div>
+                ) : (
+                  "Create Invitation"
+                )}
+              </Button>
               <SheetClose asChild>
                 <Button variant="outline">Close</Button>
               </SheetClose>
