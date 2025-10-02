@@ -3,8 +3,7 @@
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/utils/supabase/server";
 import { OrganizationSchema } from "@/schema/developer-schema";
-
-const ROLE_DEV = "dev";
+import { ROLE_DEV } from "@/lib/constant";
 
 export async function createOrganization(data: unknown) {
   const parsed = OrganizationSchema.safeParse(data);
@@ -18,7 +17,7 @@ export async function createOrganization(data: unknown) {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/signin");
+    redirect("/auth/login");
   }
 
   const { data: profile, error: profileError } = await supabase
