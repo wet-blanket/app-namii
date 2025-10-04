@@ -1,9 +1,12 @@
+"use client";
+
 import * as z from "zod";
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { verifyInviteCode } from "@/app/onboarding/action";
+import { verifyInviteCode } from "@/app/onboarding/action";
 import { VerifyCodeSchema } from "@/schema/onboarding-schema";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,24 +41,35 @@ export default function OrganizationCode({
 
   const otp = form.watch("verificationCode");
 
-  //TODO: handle server action
   const onSubmit = async (inviteCode: z.infer<typeof VerifyCodeSchema>) => {
-    try {
-      setIsLoading(true);
-      // await verifyInviteCode(inviteCode)
+    setFormError(null);
+    setIsLoading(true);
 
-      console.log("Invite code verified"); //TODO: change this to a toast)
+    try {
+      const result = await verifyInviteCode(inviteCode);
+
+      if (result.error) {
+        showError(result.error);
+        return;
+      }
+
+      if (result.success) {
+        toast.success(result.success);
+      }
 
       onComplete?.();
     } catch (error) {
       console.error("Verification Error:", error);
-
-      setFormError("Invalid verification code");
-      setTimeout(() => setFormError(null), 5000);
+      showError("Something went wrong");
     } finally {
       setIsLoading(false);
     }
   };
+
+  function showError(message: string) {
+    setFormError(message);
+    setTimeout(() => setFormError(null), 5000);
+  }
 
   return (
     <Form {...form}>

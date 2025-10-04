@@ -42,47 +42,71 @@ export async function saveOnboardingInfo(data: unknown) {
   return { success: "Information saved", profile: { fullName, username } };
 }
 
-// export async function verifyInviteCode(inviteCode: unknown) {
-//   const parsed = VerifyCodeSchema.safeParse(inviteCode);
-//   if (!parsed.success) {
-//     return { error: "Invalid data" };
-//   }
+export async function verifyInviteCode(data: unknown) {
+  const parsed = VerifyCodeSchema.safeParse(data);
+  if (!parsed.success) {
+    return { error: "Invalid data" };
+  }
 
-//   const supabase = await createSupabaseServerClient();
-//   const {
-//     data: { user },
-//   } = await supabase.auth.getUser();
-//   if (!user) {
-//     return { error: "Unauthorized" };
-//   }
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-// verify the invite code
-// const { data: invite, error: inviteError } = await supabase
-//   .from("invite_codes")
-//   .select("*")
-//   .eq("code", inviteCode)
-//   .single();
+  if (!user) {
+    redirect("/signin");
+  }
 
-// if (inviteError || !invite) {
-//   return { error: "Invalid invite code" };
-// }
+  const { verificationCode } = parsed.data;
 
-// // join the org based on the user invite code
-// const { error: memberError } = await supabase
-//   .from("organization_members")
-//   .insert({
-//     user_id: user.id,
-//     organization_id: invite.organization_id,
-//     role: invite.role,
-//   });
+  const { data: inviteCode, error: inviteCodeError } = await supabase
+    .from("invite_codes")
+    .select("*")
+    .eq("code", verificationCode)
+    .maybeSingle();
 
-// if (memberError) {
-//   return { error: memberError.message };
-// }
+  if (inviteCodeError) {
+    console.error("Error fetching the invite code", inviteCodeError);
+    return { error: "Unable to verify the invite code availability" };
+  }
 
-// return {
-//   success: true,
-//   organizationId: invite.organization_id,
-//   role: invite.role,
-// };
-// }
+  if (!inviteCode) {
+    return { error: "Your code does not exist." };
+  }
+
+  if (inviteCode.is_used) {
+    return {
+      error: "Your invite code is already used. Please request a new one.",
+    };
+  }
+
+  const { error: profileError } = await supabase
+    .from("profiles")
+    .update({
+      role: inviteCode.role,
+      org_id: inviteCode.org_id,
+      onboarding: true,
+    })
+    .eq("id", user.id);
+
+  if (profileError) {
+    console.error("Error updating profile", profileError);
+    return { error: "Unable to update profile" };
+  }
+
+  const { error: updateInviteCodeError } = await supabase
+    .from("invite_codes")
+    .update({
+      is_used: true,
+      used_by: user.id,
+      used_at: new Date().toISOString(),
+    })
+    .eq("id", inviteCode.id);
+
+  if (updateInviteCodeError) {
+    console.error("Error updating invite code", updateInviteCodeError);
+    return { error: "Unable to update invite code" };
+  }
+
+  return { success: "Onboarding Complete" };
+}
