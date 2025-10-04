@@ -90,7 +90,7 @@ export function InvitePeopleForm() {
       <SheetTrigger asChild>
         <Button size="sm">
           <UserRoundPlus />
-          Invite Org Member
+          Invite Organization Member
         </Button>
       </SheetTrigger>
       <SheetContent className="p-2">

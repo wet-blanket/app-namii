@@ -30,7 +30,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const AccountSidebar = () => {
+export function AccountSidebar() {
   const { isMobile } = useSidebar();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -122,8 +122,8 @@ const AccountSidebar = () => {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem className="hover:!bg-primary/10 focus:!bg-primary/10">
-                <Sparkles />
+              <DropdownMenuItem className="focus:text-primary focus:!bg-primary/20">
+                <Sparkles className="focus:text-primary" />
                 Upgrade to Pro
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -131,28 +131,28 @@ const AccountSidebar = () => {
             <DropdownMenuGroup>
               <DropdownMenuItem
                 asChild
-                className="hover:!bg-primary/10 focus:!bg-primary/10"
+                className="focus:text-primary focus:!bg-primary/20"
               >
                 <Link href="/settings/account">
-                  <BadgeCheck />
+                  <BadgeCheck className="focus:text-primary" />
                   Account
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
                 asChild
-                className="hover:!bg-primary/10 focus:!bg-primary/10"
+                className="focus:text-primary focus:!bg-primary/20"
               >
                 <Link href="/settings">
-                  <CreditCard />
+                  <CreditCard className="focus:text-primary" />
                   Billing
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
                 asChild
-                className="hover:!bg-primary/10 focus:!bg-primary/10"
+                className="focus:text-primary focus:!bg-primary/20"
               >
                 <Link href="/settings/notifications">
-                  <Bell />
+                  <Bell className="focus:text-primary" />
                   Notifications
                 </Link>
               </DropdownMenuItem>
@@ -160,9 +160,9 @@ const AccountSidebar = () => {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => signOut()}
-              className="hover:!bg-primary/20 focus:!bg-primary/10"
+              className="focus:text-primary focus:!bg-primary/20"
             >
-              <LogOut />
+              <LogOut className="focus:text-primary" />
               Sign out
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -170,6 +170,6 @@ const AccountSidebar = () => {
       </SidebarMenuItem>
     </SidebarMenu>
   );
-};
+}
 
 export default AccountSidebar;

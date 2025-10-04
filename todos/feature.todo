@@ -9,7 +9,7 @@ Auth:
 
 Onboarding:
   ✔ Block access to /onboarding if the user has already completed the onboarding process. @started(25-09-26 20:06) @done(25-09-26 20:12) @lasted(6m13s)
-  ☐ Create a server action to verify the invite code.
+  ✔ Create a server action to verify the invite code. @done(25-10-05 00:53)
 
 Organization:
   ☐ Allow dev to select organization when creating a base user.
