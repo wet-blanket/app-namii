@@ -3,11 +3,13 @@ import { createSupabaseServerClient } from "@/utils/supabase/server";
 import { ROLE_DEV, ROLE_DIRECTOR, ROLE_MANAGER } from "@/lib/constant";
 
 /**
- * @description Get teams information
+ * @endpoint GET /api/teams
+ * @description Get all teams information
  */
 export async function GET() {}
 
 /**
+ * @endpoint POST /api/teams
  * @description Create new team record
  * @param req Team data information
  */
@@ -100,6 +102,7 @@ export async function POST(req: NextRequest) {
       .from("teams")
       .insert({
         org_id: profile.org_id,
+        created_by: profile.id,
         name,
         description,
       })
@@ -122,15 +125,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
-/**
- * @description Update teams information
- * @param req Team data information
- */
-export async function PUT(req: NextRequest) {}
-
-/**
- * @description Delete team record
- * @param req Team data information
- */
-export async function DELETE(req: NextRequest) {}

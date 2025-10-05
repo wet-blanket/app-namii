@@ -23,6 +23,7 @@ export type Database = {
           is_used: boolean | null
           org_id: string
           role: string
+          team_id: string | null
           used_at: string | null
           used_by: string | null
         }
@@ -34,6 +35,7 @@ export type Database = {
           is_used?: boolean | null
           org_id: string
           role: string
+          team_id?: string | null
           used_at?: string | null
           used_by?: string | null
         }
@@ -45,6 +47,7 @@ export type Database = {
           is_used?: boolean | null
           org_id?: string
           role?: string
+          team_id?: string | null
           used_at?: string | null
           used_by?: string | null
         }
@@ -61,6 +64,13 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invite_codes_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
             referencedColumns: ["id"]
           },
           {
@@ -164,6 +174,7 @@ export type Database = {
       teams: {
         Row: {
           created_at: string | null
+          created_by: string | null
           description: string | null
           id: string
           name: string
@@ -172,6 +183,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
+          created_by?: string | null
           description?: string | null
           id?: string
           name: string
@@ -180,6 +192,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
+          created_by?: string | null
           description?: string | null
           id?: string
           name?: string
@@ -187,6 +200,13 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "teams_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "teams_org_id_fkey"
             columns: ["org_id"]
