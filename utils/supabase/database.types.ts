@@ -23,7 +23,6 @@ export type Database = {
           is_used: boolean | null
           org_id: string
           role: string
-          team_id: string | null
           used_at: string | null
           used_by: string | null
         }
@@ -35,7 +34,6 @@ export type Database = {
           is_used?: boolean | null
           org_id: string
           role: string
-          team_id?: string | null
           used_at?: string | null
           used_by?: string | null
         }
@@ -47,7 +45,6 @@ export type Database = {
           is_used?: boolean | null
           org_id?: string
           role?: string
-          team_id?: string | null
           used_at?: string | null
           used_by?: string | null
         }
@@ -64,13 +61,6 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "organizations"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "invite_codes_team_id_fkey"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "teams"
             referencedColumns: ["id"]
           },
           {
@@ -119,6 +109,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          account_status: string | null
           bio: string | null
           created_at: string | null
           full_name: string
@@ -126,11 +117,11 @@ export type Database = {
           onboarding: boolean | null
           org_id: string | null
           role: string | null
-          team_id: string | null
           updated_at: string | null
           username: string
         }
         Insert: {
+          account_status?: string | null
           bio?: string | null
           created_at?: string | null
           full_name: string
@@ -138,11 +129,11 @@ export type Database = {
           onboarding?: boolean | null
           org_id?: string | null
           role?: string | null
-          team_id?: string | null
           updated_at?: string | null
           username: string
         }
         Update: {
+          account_status?: string | null
           bio?: string | null
           created_at?: string | null
           full_name?: string
@@ -150,7 +141,6 @@ export type Database = {
           onboarding?: boolean | null
           org_id?: string | null
           role?: string | null
-          team_id?: string | null
           updated_at?: string | null
           username?: string
         }
@@ -162,11 +152,110 @@ export type Database = {
             referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
+        ]
+      }
+      team_join_requests: {
+        Row: {
+          created_at: string | null
+          id: string
+          message: string | null
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          team_id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          message?: string | null
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          team_id: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          message?: string | null
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          team_id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
           {
-            foreignKeyName: "profiles_team_id_fkey"
+            foreignKeyName: "team_join_requests_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_join_requests_team_id_fkey"
             columns: ["team_id"]
             isOneToOne: false
             referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_join_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_members: {
+        Row: {
+          created_at: string | null
+          id: string
+          joined_at: string | null
+          role: string
+          team_id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          joined_at?: string | null
+          role?: string
+          team_id: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          joined_at?: string | null
+          role?: string
+          team_id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_members_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
