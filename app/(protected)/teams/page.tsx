@@ -1,3 +1,9 @@
+import CreateTeamForm from "@/app/(protected)/teams/components/create-team-form";
+
 export default function Teams() {
-  return <div>Teams</div>;
+  return (
+    <div>
+      <CreateTeamForm />
+    </div>
+  );
 }
