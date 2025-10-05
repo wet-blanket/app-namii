@@ -1,6 +1,7 @@
 "use client";
 
 import * as z from "zod";
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Loader2, Plus } from "lucide-react";
@@ -44,9 +45,23 @@ export default function CreateTeamForm() {
     setFormError(null);
 
     try {
+      const response = await fetch("/api/teams", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ teamData }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to create team");
+      }
+
+      toast.success("Team created successfully!");
+      form.reset();
     } catch (error) {
-      console.error("Something went wrong:", error);
-      showError("Something went wrong");
+      showError(
+        error instanceof Error ? error.message : "Something went wrong"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -93,7 +108,7 @@ export default function CreateTeamForm() {
                   <FormControl>
                     <Input
                       id={field.name}
-                      placeholder="Shohoku"
+                      placeholder="Avengers"
                       {...field}
                       autoFocus
                     />
@@ -112,7 +127,7 @@ export default function CreateTeamForm() {
                   <FormControl>
                     <Input
                       id={field.name}
-                      placeholder="Best of the best"
+                      placeholder="Earth’s mightiest heroes united together."
                       {...field}
                     />
                   </FormControl>
