@@ -3,7 +3,11 @@
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/utils/supabase/server";
 import { InvitePeopleSchema } from "@/schema/people-schema";
-import { ROLE_DEV, ROLE_DIRECTOR, ROLE_MANAGER } from "@/lib/constant";
+import {
+  ROLE_PLATFORM_DEV,
+  ROLE_PLATFORM_DIRECTOR,
+  ROLE_PLATFORM_MANAGER,
+} from "@/lib/constant";
 
 export async function createInviteCode(data: unknown) {
   const parsed = InvitePeopleSchema.safeParse(data);
@@ -32,9 +36,9 @@ export async function createInviteCode(data: unknown) {
   }
 
   if (
-    profile.role !== ROLE_DEV &&
-    profile.role !== ROLE_MANAGER &&
-    profile.role !== ROLE_DIRECTOR
+    profile.role !== ROLE_PLATFORM_DEV &&
+    profile.role !== ROLE_PLATFORM_MANAGER &&
+    profile.role !== ROLE_PLATFORM_DIRECTOR
   ) {
     return { error: "Only users with right role can create invites" };
   }

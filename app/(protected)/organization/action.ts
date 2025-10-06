@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/utils/supabase/server";
 import { OrganizationSchema } from "@/schema/developer-schema";
-import { ROLE_DEV } from "@/lib/constant";
+import { ROLE_PLATFORM_DEV } from "@/lib/constant";
 
 export async function createOrganization(data: unknown) {
   const parsed = OrganizationSchema.safeParse(data);
@@ -31,7 +31,7 @@ export async function createOrganization(data: unknown) {
     return { error: "Unable to fetch user profile" };
   }
 
-  if (profile.role !== ROLE_DEV) {
+  if (profile.role !== ROLE_PLATFORM_DEV) {
     return { error: "Only users with role 'dev' can create organizations" };
   }
 
