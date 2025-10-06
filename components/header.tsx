@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { createSupabaseBrowserClient } from "@/utils/supabase/client";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -64,9 +65,50 @@ interface BreadcrumbData {
   isCurrent: boolean;
 }
 
+// Extract first name initial
+const getFirstNameInitials = (fullName?: string) => {
+  if (!fullName) return "U";
+  const names = fullName.trim().split(" ");
+  return names[0]?.charAt(0).toUpperCase() || "U";
+};
+
 export default function HeaderComponent() {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
+  const [userInitials, setUserInitials] = useState<string>("U");
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getUserProfile = async () => {
+      const supabase = createSupabaseBrowserClient();
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        // Get avatar from provider
+        const avatar = user.user_metadata?.avatar_url;
+        setAvatarUrl(avatar);
+
+        // Get full_name from profiles
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("full_name")
+          .eq("id", user.id)
+          .single();
+
+        if (profile?.full_name) {
+          setUserInitials(getFirstNameInitials(profile.full_name));
+        } else if (user.user_metadata?.name) {
+          // Fallback to provider name
+          setUserInitials(getFirstNameInitials(user.user_metadata.name));
+        }
+      }
+    };
+
+    getUserProfile();
+  }, []);
 
   const getBreadcrumbs = (): BreadcrumbData[] => {
     for (const [sectionKey, section] of Object.entries(menuStructure)) {
@@ -148,8 +190,11 @@ export default function HeaderComponent() {
           <span className="sr-only">Toggle theme</span>
         </Button> */}
 
-        <Avatar className="h-8 w-8">
-          <AvatarFallback>SN</AvatarFallback>
+        <Avatar className="h-8 w-8 rounded-md">
+          <AvatarImage src={avatarUrl || undefined} alt="User avatar" />
+          <AvatarFallback className="rounded-lg bg-primary/20 text-primary">
+            {userInitials}
+          </AvatarFallback>
         </Avatar>
       </div>
     </header>

@@ -30,22 +30,43 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function AccountSidebar() {
+interface Profile {
+  full_name: string | null;
+  username: string | null;
+}
+
+export default function AccountSidebar() {
   const { isMobile } = useSidebar();
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const getUser = async () => {
+    const getUserAndProfile = async () => {
       const supabase = createSupabaseBrowserClient();
+
+      // Get authenticated user
       const {
         data: { user },
       } = await supabase.auth.getUser();
+
       setUser(user);
+
+      // Fetch profile data
+      if (user) {
+        const { data: profileData } = await supabase
+          .from("profiles")
+          .select("full_name, username")
+          .eq("id", user.id)
+          .single();
+
+        setProfile(profileData);
+      }
+
       setLoading(false);
     };
 
-    getUser();
+    getUserAndProfile();
   }, []);
 
   if (loading) {
@@ -64,10 +85,10 @@ export function AccountSidebar() {
     );
   }
 
-  const user_metadata = user?.user_metadata;
-  const name = user_metadata?.name;
+  // Use profile.full_name instead of user_metadata.name
+  const name = profile?.full_name || user?.user_metadata?.name || "User";
   const email = user?.email;
-  const avatar_url = user_metadata?.avatar_url;
+  const avatar_url = user?.user_metadata?.avatar_url;
 
   // Extract first name for fallback
   const getFirstNameInitials = (fullName?: string) => {
@@ -89,7 +110,7 @@ export function AccountSidebar() {
             >
               <Avatar className="h-8 w-8 rounded-md">
                 <AvatarImage src={avatar_url} alt={name} />
-                <AvatarFallback className="rounded-lg">
+                <AvatarFallback className="rounded-lg bg-primary/20 text-primary">
                   {firstNameInitial}
                 </AvatarFallback>
               </Avatar>
@@ -171,5 +192,3 @@ export function AccountSidebar() {
     </SidebarMenu>
   );
 }
-
-export default AccountSidebar;
