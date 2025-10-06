@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/utils/supabase/server";
-import { ROLE_DEV, ROLE_DIRECTOR, ROLE_MANAGER } from "@/lib/constant";
+import {
+  ROLE_PLATFORM_DEV,
+  ROLE_PLATFORM_DIRECTOR,
+  ROLE_PLATFORM_MANAGER,
+  ROLE_TEAM_OWNER,
+} from "@/lib/constant";
 
 /**
  * @endpoint GET /api/teams
@@ -39,6 +44,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // verfiy user role
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("*")
@@ -56,9 +62,9 @@ export async function POST(req: NextRequest) {
     }
 
     if (
-      profile.role !== ROLE_DEV &&
-      profile.role !== ROLE_MANAGER &&
-      profile.role !== ROLE_DIRECTOR
+      profile.role !== ROLE_PLATFORM_DEV &&
+      profile.role !== ROLE_PLATFORM_MANAGER &&
+      profile.role !== ROLE_PLATFORM_DIRECTOR
     ) {
       return NextResponse.json(
         { error: "Only users with right role can create teams" },
@@ -77,6 +83,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // check if the team already exist
     const { data: teamExists, error: teamExistsError } = await supabase
       .from("teams")
       .select("id")
@@ -98,6 +105,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // create team
     const { data: newTeam, error: newTeamError } = await supabase
       .from("teams")
       .insert({
@@ -110,8 +118,27 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (newTeamError) {
+      console.error("Error creating team:", newTeamError);
       return NextResponse.json(
         { error: "Error saving the team information" },
+        { status: 500 }
+      );
+    }
+
+    // add creator as the owner of the team
+    const { error: memberError } = await supabase.from("team_members").insert({
+      team_id: newTeam.id,
+      user_id: profile.id,
+      role: ROLE_TEAM_OWNER,
+    });
+
+    if (memberError) {
+      console.error("Error adding team creator as owner:", memberError);
+      // Rollback: delete the team if we can't add the owner
+      await supabase.from("teams").delete().eq("id", newTeam.id);
+
+      return NextResponse.json(
+        { error: "Error setting up team membership" },
         { status: 500 }
       );
     }
