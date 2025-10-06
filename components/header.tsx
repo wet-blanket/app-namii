@@ -161,7 +161,7 @@ export default function HeaderComponent() {
   const breadcrumbs = getBreadcrumbs();
 
   return (
-    <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+    <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-2 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4">
       <SidebarTrigger variant="outline" className="max-md:scale-125" />
 
       <Breadcrumb className="ml-2">

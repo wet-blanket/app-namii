@@ -77,7 +77,7 @@ export default function CreateTeamForm() {
       <SheetTrigger asChild>
         <Button size="sm">
           <Plus />
-          New Team
+          Create New Team
         </Button>
       </SheetTrigger>
       <SheetContent className="p-2">

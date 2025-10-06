@@ -14,7 +14,7 @@ export default async function ProtectedLayout({
       <AppSidebar />
       <SidebarInset>
         <HeaderComponent />
-        <div className="flex flex-1 flex-col p-4 gap-4">{children}</div>
+        <div className="flex flex-1 flex-col px-8 pt-8">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );
